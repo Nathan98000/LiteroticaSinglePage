@@ -1,0 +1,15 @@
+{
+  "name": "literotica-single-page",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension that combines multi-page Literotica stories into one continuous page.",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:live": "node test/live/live-test.mjs",
+    "icons": "python3 scripts/make-icons.py"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3",
+    "playwright-core": "^1.61.1"
+  }
+}

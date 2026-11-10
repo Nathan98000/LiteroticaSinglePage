@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Literotica Single-Page Reader",
+  "short_name": "Single-Page Reader",
+  "version": "1.0.0",
+  "description": "Automatically combines every page of a multi-page Literotica story into one continuous page.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.literotica.com/*"],
+      "exclude_matches": [
+        "https://forum.literotica.com/*",
+        "https://shop.literotica.com/*",
+        "https://speedy.literotica.com/*",
+        "https://uploads.literotica.com/*",
+        "https://vipcams.literotica.com/*"
+      ],
+      "js": ["src/core.js", "src/loader.js", "src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}
