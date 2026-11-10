@@ -1,0 +1,38 @@
+# Pushing a tag like v1.0.1 runs the tests, checks the tag matches the version in
+# manifest.json, and publishes a GitHub release with the extension ZIP attached.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+      - name: Check the tag matches manifest.json
+        run: |
+          version=$(python3 -c 'import json; print(json.load(open("manifest.json"))["version"])')
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match manifest.json version $version"
+            exit 1
+          fi
+      - name: Build the extension ZIP
+        run: python3 scripts/build-guide.py
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/literotica-single-page-reader.zip \
+            --verify-tag \
+            --title "Single-Page Reader $GITHUB_REF_NAME" \
+            --notes "Download **literotica-single-page-reader.zip** below. Step-by-step install instructions: https://nathan98000.github.io/LiteroticaSinglePage/"

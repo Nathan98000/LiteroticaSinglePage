@@ -1,0 +1,64 @@
+<script type="application/octet-stream" id="extension-zip">__ZIP_BASE64__</script>
+<script>
+(function () {
+  var FILE_NAME = 'literotica-single-page-reader.zip';
+  var UNAVAILABLE = 'Downloading isn’t available here. Ask the person who shared this page for the extension’s ZIP file, then carry on from step 1.';
+
+  var downloadsReady = (window.claude && typeof window.claude.use === 'function')
+    ? window.claude.use('downloads').catch(function () { return null; })
+    : Promise.resolve(null);
+
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-download]'));
+
+  function statusFor(button) {
+    return document.getElementById(button.getAttribute('aria-describedby'));
+  }
+
+  function setStatus(button, text, warning) {
+    var el = statusFor(button);
+    el.textContent = text;
+    el.classList.toggle('is-warning', !!warning);
+  }
+
+  function showUnavailable() {
+    buttons.forEach(function (button) {
+      button.hidden = true;
+      setStatus(button, UNAVAILABLE, true);
+    });
+  }
+
+  function zipBytes() {
+    var raw = atob(document.getElementById('extension-zip').textContent.trim());
+    var bytes = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+    return bytes;
+  }
+
+  downloadsReady.then(function (downloads) {
+    if (!downloads) showUnavailable();
+  });
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      button.disabled = true;
+      setStatus(button, 'Getting the file ready…');
+      downloadsReady.then(function (downloads) {
+        if (!downloads) {
+          showUnavailable();
+          return;
+        }
+        return downloads.save({ filename: FILE_NAME, data: zipBytes() }).then(function () {
+          setStatus(button, 'Saved. Look for ' + FILE_NAME + ' in your Downloads folder, then go on to step 1.');
+        }, function (err) {
+          var code = err && err.code;
+          if (code === 'declined') setStatus(button, 'Download cancelled. Click the button again when you’re ready.');
+          else if (code === 'rate_limited') setStatus(button, 'A download prompt is already open. Finish that one first, then try again.', true);
+          else setStatus(button, UNAVAILABLE, true);
+        });
+      }).then(function () {
+        button.disabled = false;
+      });
+    });
+  });
+})();
+</script>

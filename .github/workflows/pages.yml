@@ -1,0 +1,45 @@
+# Publishes the install guide (and the extension ZIP next to it) to GitHub Pages
+# whenever the guide or the extension changes on main.
+name: Publish install guide
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'guide/**'
+      - 'src/**'
+      - 'icons/**'
+      - 'manifest.json'
+      - 'scripts/build-guide.py'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the guide site
+        run: python3 scripts/build-guide.py
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

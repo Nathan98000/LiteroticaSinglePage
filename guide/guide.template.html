@@ -129,6 +129,7 @@ q { quotes: "\201C" "\201D"; }
 .btn-primary { background: var(--accent); color: var(--accent-ink); }
 .btn-primary:hover { filter: brightness(1.08); }
 .btn-primary[disabled] { opacity: 0.6; cursor: progress; }
+a.btn { display: inline-block; text-decoration: none; }
 .btn-small {
   font-size: 0.875rem;
   padding: 7px 12px;
@@ -367,7 +368,7 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: 0.875r
     <h1>Read Literotica stories on one page</h1>
     <p class="lede">Single-Page Reader joins every page of a multi-page story into one long page, so you can keep scrolling instead of clicking “Next page”. It works by itself: open a story and it does the rest.</p>
     <div class="download">
-      <button type="button" id="download-top" class="btn btn-primary" data-download aria-describedby="download-top-status">Download the extension</button>
+      __DOWNLOAD_BUTTON_TOP__
       <span class="meta">ZIP file, __ZIP_KB__ KB, version __VERSION__</span>
     </div>
     <p id="download-top-status" class="status" role="status" aria-live="polite"></p>
@@ -410,7 +411,7 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: 0.875r
           <h3>Download it and unzip it</h3>
           <p>Download the extension with the button below. Then open your Downloads folder and unzip the file: on a Mac, double-click it; on Windows, right-click it and choose <b>Extract All</b>. You’ll get a folder called <code>literotica-single-page-reader</code>.</p>
           <div class="download">
-            <button type="button" id="download-step" class="btn btn-primary" data-download aria-describedby="download-step-status">Download the extension</button>
+            __DOWNLOAD_BUTTON_STEP__
           </div>
           <p id="download-step-status" class="status" role="status" aria-live="polite"></p>
         </div>
@@ -569,69 +570,9 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: 0.875r
   </footer>
 </div>
 
-<script type="application/octet-stream" id="extension-zip">__ZIP_BASE64__</script>
+__DOWNLOAD_SCRIPT__
 <script>
 (function () {
-  var FILE_NAME = 'literotica-single-page-reader.zip';
-  var UNAVAILABLE = 'Downloading isn’t available here. Ask the person who shared this page for the extension’s ZIP file, then carry on from step 1.';
-
-  var downloadsReady = (window.claude && typeof window.claude.use === 'function')
-    ? window.claude.use('downloads').catch(function () { return null; })
-    : Promise.resolve(null);
-
-  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-download]'));
-
-  function statusFor(button) {
-    return document.getElementById(button.getAttribute('aria-describedby'));
-  }
-
-  function setStatus(button, text, warning) {
-    var el = statusFor(button);
-    el.textContent = text;
-    el.classList.toggle('is-warning', !!warning);
-  }
-
-  function showUnavailable() {
-    buttons.forEach(function (button) {
-      button.hidden = true;
-      setStatus(button, UNAVAILABLE, true);
-    });
-  }
-
-  function zipBytes() {
-    var raw = atob(document.getElementById('extension-zip').textContent.trim());
-    var bytes = new Uint8Array(raw.length);
-    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
-    return bytes;
-  }
-
-  downloadsReady.then(function (downloads) {
-    if (!downloads) showUnavailable();
-  });
-
-  buttons.forEach(function (button) {
-    button.addEventListener('click', function () {
-      button.disabled = true;
-      setStatus(button, 'Getting the file ready…');
-      downloadsReady.then(function (downloads) {
-        if (!downloads) {
-          showUnavailable();
-          return;
-        }
-        return downloads.save({ filename: FILE_NAME, data: zipBytes() }).then(function () {
-          setStatus(button, 'Saved. Look for ' + FILE_NAME + ' in your Downloads folder, then go on to step 1.');
-        }, function (err) {
-          var code = err && err.code;
-          if (code === 'declined') setStatus(button, 'Download cancelled. Click the button again when you’re ready.');
-          else if (code === 'rate_limited') setStatus(button, 'A download prompt is already open. Finish that one first, then try again.', true);
-          else setStatus(button, UNAVAILABLE, true);
-        });
-      }).then(function () {
-        button.disabled = false;
-      });
-    });
-  });
-
   var copyButton = document.getElementById('copy-address');
   var address = document.getElementById('ext-address');
   copyButton.addEventListener('click', function () {
