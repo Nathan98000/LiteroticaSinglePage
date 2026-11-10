@@ -1,0 +1,656 @@
+<title>Single-Page Reader Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Literata:opsz,wght@7..72,500..650&display=swap">
+<style>
+/* Layout: one reading column; numbered install steps, each with a small drawing of what you'll see on screen. */
+:root {
+  --paper: #fbfafb;
+  --surface: #ffffff;
+  --ink: #1e1a20;
+  --muted: #625a66;
+  --line: #e6e0e4;
+  --line-strong: #d3cad0;
+  --accent: #8b1a2b;
+  --accent-ink: #ffffff;
+  --accent-soft: #f7eaec;
+  --code-bg: #f1edf0;
+  --pill: rgba(24, 24, 27, 0.92);
+  --pill-fg: #f4f4f5;
+  --pill-btn: rgba(255, 255, 255, 0.16);
+  --pill-error: rgba(127, 29, 29, 0.95);
+  --pill-edge: rgba(0, 0, 0, 0);
+  --focus: #2f6fdb;
+  --font-display: "Literata", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --pill-font: 500 12px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141215;
+    --surface: #1c191d;
+    --ink: #ece7eb;
+    --muted: #a69da9;
+    --line: #2e2930;
+    --line-strong: #453e47;
+    --accent: #e8798a;
+    --accent-ink: #1a0b0f;
+    --accent-soft: #2c1a1f;
+    --code-bg: #241f25;
+    --focus: #8ab4f8;
+    --pill-edge: rgba(255, 255, 255, 0.16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141215;
+  --surface: #1c191d;
+  --ink: #ece7eb;
+  --muted: #a69da9;
+  --line: #2e2930;
+  --line-strong: #453e47;
+  --accent: #e8798a;
+  --accent-ink: #1a0b0f;
+  --accent-soft: #2c1a1f;
+  --code-bg: #241f25;
+  --focus: #8ab4f8;
+  --pill-edge: rgba(255, 255, 255, 0.16);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  max-width: calc(44rem + 32px);
+  margin: 0 auto;
+  padding-block: 56px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 64px;
+}
+section, header, footer { display: grid; gap: 16px; min-width: 0; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: clamp(2.1rem, 1.5rem + 2.6vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+h3 { font-size: 1.0625rem; font-weight: 600; line-height: 1.4; }
+p, ul, ol, dl, figure { margin: 0; }
+ul { padding-left: 1.25rem; display: grid; gap: 8px; }
+a { color: var(--accent); }
+b, strong { font-weight: 600; }
+code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+q { quotes: "\201C" "\201D"; }
+.muted { color: var(--muted); }
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.lede { font-size: 1.1875rem; line-height: 1.6; max-width: 36rem; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Buttons */
+.btn {
+  font: 600 1rem/1 var(--font-body);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 14px 20px;
+  cursor: pointer;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary[disabled] { opacity: 0.6; cursor: progress; }
+.btn-small {
+  font-size: 0.875rem;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.btn-small:hover { border-color: var(--muted); }
+.download { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.download .meta { font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.status { font-size: 0.9375rem; color: var(--muted); min-height: 1.5em; }
+.status.is-warning { color: var(--accent); }
+.unofficial { font-size: 0.875rem; color: var(--muted); }
+
+/* Before / after drawing */
+.illus {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.compare { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 16px 24px; }
+.compare figure { display: grid; justify-items: center; gap: 10px; }
+.compare figcaption { font-size: 0.8125rem; color: var(--muted); text-align: center; }
+.sheets { display: flex; gap: 8px; align-items: flex-end; }
+.sheet {
+  width: 58px;
+  padding: 9px 7px;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+}
+.sheet i { display: block; height: 4px; border-radius: 2px; background: var(--line-strong); }
+.sheet i:nth-child(3n) { width: 70%; }
+.sheet .next {
+  margin-top: 4px;
+  justify-self: end;
+  font: 600 8px/1 var(--font-body);
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+.sheet.long { width: 84px; }
+.arrow { color: var(--muted); font-size: 1.5rem; line-height: 1; align-self: center; padding-bottom: 24px; }
+
+/* Facts */
+.facts { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 12px 28px; }
+.facts li { min-width: 0; }
+
+/* Steps */
+.steps { list-style: none; padding: 0; display: grid; gap: 0; counter-reset: step; }
+.step {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: 16px;
+  position: relative;
+  padding-bottom: 36px;
+}
+.step:last-child { padding-bottom: 0; }
+.step::before {
+  content: counter(step);
+  grid-row: 1 / span 20;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: 600 0.9375rem/1 var(--font-body);
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-variant-numeric: tabular-nums;
+}
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(1.125rem - 1px);
+  top: 2.75rem;
+  bottom: 8px;
+  width: 2px;
+  background: var(--line);
+}
+.step > * { grid-column: 2; }
+.step-body { display: grid; gap: 12px; min-width: 0; padding-top: 4px; }
+.aside { font-size: 0.9375rem; color: var(--muted); }
+.copy-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.copy-row code { font-size: 0.95rem; padding: 6px 10px; user-select: all; }
+
+/* Simplified drawings of Chrome's extensions page */
+.mock { padding: 0; overflow: hidden; }
+.mock-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9375rem;
+}
+.mock-title { font-weight: 600; }
+.mock-switch { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.875rem; }
+.mock-switch.is-focus { color: var(--ink); font-weight: 600; }
+.toggle {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--accent);
+  position: relative;
+  flex: none;
+}
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+.ring { box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--accent); }
+.mock-tools { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; }
+.mock-btn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.mock-btn.is-focus { color: var(--accent); border-color: var(--accent); }
+.mock-label { font-size: 0.75rem; color: var(--muted); padding: 0 16px 12px; }
+.ext-card { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 14px; padding: 16px; }
+.ext-card img { width: 40px; height: 40px; grid-row: span 2; }
+.ext-name { font-weight: 600; font-size: 0.9375rem; }
+.ext-name span { font-weight: 500; color: var(--muted); margin-left: 6px; font-variant-numeric: tabular-nums; }
+.ext-desc { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; }
+.ext-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.ext-foot span:first-child { display: inline-flex; gap: 16px; }
+
+/* The extension's own status label, drawn as it appears on a story page */
+.states { display: grid; gap: 20px; }
+.state { display: grid; grid-template-columns: minmax(0, 17rem) minmax(0, 1fr); gap: 8px 24px; align-items: start; }
+.state dd { margin: 0; min-width: 0; }
+.pill {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 6px 6px 12px;
+  border-radius: 999px;
+  background: var(--pill);
+  color: var(--pill-fg);
+  font: var(--pill-font);
+  box-shadow: 0 0 0 1px var(--pill-edge);
+}
+.pill.loading { padding-right: 12px; }
+.pill.quiet { opacity: 0.78; }
+.pill.error { background: var(--pill-error); border-radius: 14px; }
+.pill .pbtn {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--pill-btn);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.spin {
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--pill-fg);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tips { display: grid; gap: 10px; padding-top: 8px; }
+
+/* Troubleshooting */
+.faq { display: grid; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 32px 14px 0;
+  font-weight: 600;
+  position: relative;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 12px;
+  font: 400 1.25rem/1.2 var(--font-body);
+  color: var(--muted);
+}
+.faq details[open] summary::after { content: "\2013"; }
+.faq .answer { display: grid; gap: 10px; padding-bottom: 16px; color: var(--ink); }
+
+footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: 0.875rem; color: var(--muted); }
+
+@media (max-width: 560px) {
+  .page { gap: 52px; padding-block: 36px 56px; }
+  .state { grid-template-columns: minmax(0, 1fr); }
+  .lede { font-size: 1.125rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin { animation: none; }
+}
+</style>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">Browser extension for Chrome, Edge and Brave</p>
+    <h1>Read Literotica stories on one page</h1>
+    <p class="lede">Single-Page Reader joins every page of a multi-page story into one long page, so you can keep scrolling instead of clicking “Next page”. It works by itself: open a story and it does the rest.</p>
+    <div class="download">
+      <button type="button" id="download-top" class="btn btn-primary" data-download aria-describedby="download-top-status">Download the extension</button>
+      <span class="meta">ZIP file, __ZIP_KB__ KB, version __VERSION__</span>
+    </div>
+    <p id="download-top-status" class="status" role="status" aria-live="polite"></p>
+    <p class="unofficial">An independent, unofficial extension. It isn’t made by or affiliated with Literotica.</p>
+  </header>
+
+  <section aria-labelledby="what-heading">
+    <h2 id="what-heading">What it does</h2>
+    <div class="illus" role="img" aria-label="Drawing: three separate pages, each with a Next button, become one long page.">
+      <div class="compare" aria-hidden="true">
+        <figure>
+          <div class="sheets">
+            <div class="sheet"><i></i><i></i><i></i><i></i><i></i><i></i><span class="next">Next ›</span></div>
+            <div class="sheet"><i></i><i></i><i></i><i></i><i></i><i></i><span class="next">Next ›</span></div>
+            <div class="sheet"><i></i><i></i><i></i><i></i><i></i><i></i><span class="next">Next ›</span></div>
+          </div>
+          <figcaption>Before: one page at a time</figcaption>
+        </figure>
+        <span class="arrow">→</span>
+        <figure>
+          <div class="sheet long"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <figcaption>After: the whole story</figcaption>
+        </figure>
+      </div>
+    </div>
+    <ul class="facts">
+      <li><strong>Automatic.</strong> There’s nothing to press. It starts as soon as you open a story.</li>
+      <li><strong>Looks the same.</strong> The site’s layout, fonts and colours stay exactly as they are.</li>
+      <li><strong>Short stories stay as they are.</strong> A story that’s already one page doesn’t change.</li>
+      <li><strong>Private.</strong> It collects nothing and only talks to Literotica.</li>
+    </ul>
+  </section>
+
+  <section id="install" aria-labelledby="install-heading">
+    <h2 id="install-heading">Install it</h2>
+    <p>It takes about three minutes. Extensions that aren’t in the Chrome Web Store are added through Chrome’s Developer mode. That sounds technical, but it’s just a switch.</p>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-body">
+          <h3>Download it and unzip it</h3>
+          <p>Download the extension with the button below. Then open your Downloads folder and unzip the file: on a Mac, double-click it; on Windows, right-click it and choose <b>Extract All</b>. You’ll get a folder called <code>literotica-single-page-reader</code>.</p>
+          <div class="download">
+            <button type="button" id="download-step" class="btn btn-primary" data-download aria-describedby="download-step-status">Download the extension</button>
+          </div>
+          <p id="download-step-status" class="status" role="status" aria-live="polite"></p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-body">
+          <h3>Move the folder somewhere safe</h3>
+          <p>Chrome runs the extension straight from this folder, so move it somewhere you won’t delete it by accident, such as your Documents folder. If the folder is deleted, the extension stops working.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-body">
+          <h3>Open the extensions page and turn on Developer mode</h3>
+          <p>Copy this address, paste it into Chrome’s address bar, and press Enter. (Chrome doesn’t let web pages link to it, so it has to be typed or pasted.)</p>
+          <div class="copy-row">
+            <code id="ext-address">chrome://extensions</code>
+            <button type="button" id="copy-address" class="btn btn-small">Copy</button>
+          </div>
+          <p>On that page, turn on the <b>Developer mode</b> switch in the top-right corner.</p>
+          <div class="illus mock" role="img" aria-label="Drawing of the top of Chrome’s extensions page: the Developer mode switch at the top right is on, and a row of buttons starting with Load unpacked has appeared.">
+            <div aria-hidden="true">
+              <div class="mock-bar">
+                <span class="mock-title">Extensions</span>
+                <span class="mock-switch is-focus">Developer mode <span class="toggle ring"></span></span>
+              </div>
+              <div class="mock-tools">
+                <span class="mock-btn is-focus">Load unpacked</span>
+                <span class="mock-btn">Pack extension</span>
+                <span class="mock-btn">Update</span>
+              </div>
+              <p class="mock-label">Simplified drawing. Your screen will look a little different.</p>
+            </div>
+          </div>
+          <p class="aside">Using Microsoft Edge or Brave? Paste <code>edge://extensions</code> or <code>brave://extensions</code> instead. In Edge, the Developer mode switch is in the menu on the left.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-body">
+          <h3>Click “Load unpacked” and choose the folder</h3>
+          <p>Once Developer mode is on, a <b>Load unpacked</b> button appears. Click it, find the <code>literotica-single-page-reader</code> folder (it has a file called <code>manifest.json</code> directly inside), select the folder, and click <b>Select</b> (<b>Select Folder</b> on Windows).</p>
+          <p>The extension then appears in the list, already switched on:</p>
+          <div class="illus mock" role="img" aria-label="Drawing of the extension’s card on the extensions page: __NAME__, version __VERSION__, switched on.">
+            <div class="ext-card" aria-hidden="true">
+              <img src="data:image/png;base64,__ICON_B64__" alt="">
+              <span class="ext-name">__NAME__<span>__VERSION__</span></span>
+              <span class="ext-desc">__DESCRIPTION__</span>
+              <span class="ext-foot"><span><span>Details</span><span>Remove</span></span><span class="toggle"></span></span>
+            </div>
+          </div>
+          <p>There’s no toolbar button and nothing to set up.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-body">
+          <h3>Open a story</h3>
+          <p>Go to any Literotica story with more than one page. After a second or two, the rest of the story appears around the page you’re on. If you already had a story open, reload it first.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section id="use" aria-labelledby="use-heading">
+    <h2 id="use-heading">Using it</h2>
+    <p>While it works, a small dark label appears in the bottom-right corner of the story page. This is what it can say.</p>
+    <dl class="states">
+      <div class="state">
+        <dt><span class="pill loading"><span class="spin" aria-hidden="true"></span>Combining pages… 2 of 5</span></dt>
+        <dd>The other pages are loading. Keep reading: nothing on the page moves while you wait.</dd>
+      </div>
+      <div class="state">
+        <dt><span class="pill quiet">5 pages combined <span class="pbtn">Paged view</span></span></dt>
+        <dd>Done. The whole story is on one page. Click <b>Paged view</b> to go back to the site’s normal pages. The label fades so it stays out of your way.</dd>
+      </div>
+      <div class="state">
+        <dt><span class="pill quiet">Page 1 of 5 <span class="pbtn">Single page</span></span></dt>
+        <dd>You’re looking at the normal pages. Click <b>Single page</b> to join them again. It switches instantly.</dd>
+      </div>
+      <div class="state">
+        <dt><span class="pill error">Couldn’t find page 4 of 5. Showing the original pages. <span class="pbtn">Retry</span> <span class="pbtn">×</span></span></dt>
+        <dd>A page didn’t load, so you get the normal pages rather than a story with a gap in it. Click <b>Retry</b> to try again, or <b>×</b> to hide the message.</dd>
+      </div>
+    </dl>
+    <div class="tips">
+      <h3>Good to know</h3>
+      <ul>
+        <li><b>Started on a later page?</b> If you open page 3 of a story, you stay exactly where you are on page 3. Pages 1 and 2 are added above it, so scroll up to read them.</li>
+        <li><b>Each part of a series stays separate.</b> On Literotica, every chapter or part is its own story. The extension joins the pages of the part you’re reading, not the whole series.</li>
+        <li><b>Paged view lasts until you leave.</b> The next story you open is joined automatically again.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="help" aria-labelledby="help-heading">
+    <h2 id="help-heading">If something isn’t working</h2>
+    <div class="faq">
+      <details id="faq-manifest">
+        <summary>Chrome says “Manifest file is missing or unreadable”</summary>
+        <div class="answer">
+          <p>You picked a folder one level too high. Open the folder you chose: if there’s another <code>literotica-single-page-reader</code> folder inside it, choose that inner one. The right folder has <code>manifest.json</code> directly inside it.</p>
+        </div>
+      </details>
+      <details id="faq-nothing">
+        <summary>Nothing happens when I open a story</summary>
+        <div class="answer">
+          <ul>
+            <li>Check that the story really has more than one page. Single-page stories are left alone.</li>
+            <li>Reload the story page.</li>
+            <li>Open <code>chrome://extensions</code> and check that __NAME__ is switched on.</li>
+          </ul>
+        </div>
+      </details>
+      <details id="faq-red">
+        <summary>The red message keeps coming back</summary>
+        <div class="answer">
+          <p>Literotica didn’t send one of the pages, usually because the connection dropped or the site is busy. Wait a moment and click <b>Retry</b>. You can always keep reading with the normal pages in the meantime.</p>
+        </div>
+      </details>
+      <details id="faq-warning">
+        <summary>Chrome shows a warning about Developer mode or this extension</summary>
+        <div class="answer">
+          <p>Chrome sometimes reminds you about extensions that were added outside the Chrome Web Store. That’s expected for an extension installed this way. Leave it switched on to keep using it.</p>
+        </div>
+      </details>
+      <details id="faq-devices">
+        <summary>Does it work on a phone or tablet, or in Safari or Firefox?</summary>
+        <div class="answer">
+          <p>No. It needs Chrome, Microsoft Edge or Brave on a Windows, Mac or Linux computer. Phone and tablet browsers don’t support extensions like this one.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="privacy" aria-labelledby="privacy-heading">
+    <h2 id="privacy-heading">What it can see</h2>
+    <p>When you add it, Chrome says the extension can <q>read and change your data on literotica.com sites</q>. That’s what lets it join a story’s pages on the page you’re reading. Here’s what it does with that:</p>
+    <ul>
+      <li>It only runs on Literotica, and only changes story pages.</li>
+      <li>It only downloads the other pages of the story you’re reading, from Literotica itself, just as your browser would when you click “Next page”.</li>
+      <li>It doesn’t collect, store or send anything anywhere else. It has no account and no settings.</li>
+      <li>It doesn’t get around logins, age checks or anything else the site asks of you.</li>
+    </ul>
+  </section>
+
+  <section id="manage" aria-labelledby="manage-heading">
+    <h2 id="manage-heading">Turning it off, removing it or updating it</h2>
+    <p>All of these happen on the extensions page (<code>chrome://extensions</code>).</p>
+    <ul>
+      <li><b>Turn it off for a while:</b> flip the switch on its card off, and back on whenever you like.</li>
+      <li><b>Remove it:</b> click <b>Remove</b> on its card. You can then delete the folder.</li>
+      <li><b>Install a newer version:</b> remove the old one, delete its folder, then follow the install steps again with the new download.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Single-Page Reader is an independent, unofficial browser extension. It isn’t made, endorsed or supported by Literotica.</p>
+  </footer>
+</div>
+
+<script type="application/octet-stream" id="extension-zip">__ZIP_BASE64__</script>
+<script>
+(function () {
+  var FILE_NAME = 'literotica-single-page-reader.zip';
+  var UNAVAILABLE = 'Downloading isn’t available here. Ask the person who shared this page for the extension’s ZIP file, then carry on from step 1.';
+
+  var downloadsReady = (window.claude && typeof window.claude.use === 'function')
+    ? window.claude.use('downloads').catch(function () { return null; })
+    : Promise.resolve(null);
+
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-download]'));
+
+  function statusFor(button) {
+    return document.getElementById(button.getAttribute('aria-describedby'));
+  }
+
+  function setStatus(button, text, warning) {
+    var el = statusFor(button);
+    el.textContent = text;
+    el.classList.toggle('is-warning', !!warning);
+  }
+
+  function showUnavailable() {
+    buttons.forEach(function (button) {
+      button.hidden = true;
+      setStatus(button, UNAVAILABLE, true);
+    });
+  }
+
+  function zipBytes() {
+    var raw = atob(document.getElementById('extension-zip').textContent.trim());
+    var bytes = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+    return bytes;
+  }
+
+  downloadsReady.then(function (downloads) {
+    if (!downloads) showUnavailable();
+  });
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      button.disabled = true;
+      setStatus(button, 'Getting the file ready…');
+      downloadsReady.then(function (downloads) {
+        if (!downloads) {
+          showUnavailable();
+          return;
+        }
+        return downloads.save({ filename: FILE_NAME, data: zipBytes() }).then(function () {
+          setStatus(button, 'Saved. Look for ' + FILE_NAME + ' in your Downloads folder, then go on to step 1.');
+        }, function (err) {
+          var code = err && err.code;
+          if (code === 'declined') setStatus(button, 'Download cancelled. Click the button again when you’re ready.');
+          else if (code === 'rate_limited') setStatus(button, 'A download prompt is already open. Finish that one first, then try again.', true);
+          else setStatus(button, UNAVAILABLE, true);
+        });
+      }).then(function () {
+        button.disabled = false;
+      });
+    });
+  });
+
+  var copyButton = document.getElementById('copy-address');
+  var address = document.getElementById('ext-address');
+  copyButton.addEventListener('click', function () {
+    function selectAddress() {
+      var range = document.createRange();
+      range.selectNodeContents(address);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      copyButton.textContent = 'Selected: press Ctrl+C (⌘C on a Mac)';
+    }
+    try {
+      navigator.clipboard.writeText(address.textContent).then(function () {
+        copyButton.textContent = 'Copied';
+        setTimeout(function () { copyButton.textContent = 'Copy'; }, 2000);
+      }, selectAddress);
+    } catch (e) {
+      selectAddress();
+    }
+  });
+})();
+</script>
